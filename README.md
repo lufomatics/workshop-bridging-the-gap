@@ -15,11 +15,13 @@ Este repositório contém:
 1. Workflows automatizados que guiam você nos passos principais.
 2. Instruções em arquivos Markdown (passo a passo via Issues).
 3. Um roteiro simplificado para que, ao final, você:
-   - Crie/Configure uma organização no GitHub.  
-   - Transfira este repositório para sua nova organização.
+   - Crie uma organização no GitHub.
+   - Configure sua organização, conhecendo cada opção disponível.
+   - (opcional) Transfira este repositório para sua nova organização.
    - Crie algumas rulesets neste repositório.
    - Faça uma modificação simples no código (via interface do GitHub).  
    - Abra um Pull Request para revisão e merge, e observe como suas rulesets se comportam.
+   - (opcional) Explore o GitHub Codespaces integrado com Copilot
 
 ---
 
