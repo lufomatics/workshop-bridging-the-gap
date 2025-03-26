@@ -1,9 +1,11 @@
 name: Step 2 - Open A Pull Request
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - opened
 
 permissions:
   contents: write
