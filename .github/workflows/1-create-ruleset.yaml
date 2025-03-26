@@ -1,6 +1,14 @@
 name: Step 1 - Create A Ruleset
 
 on:
+  workflow_dispatch:
+    inputs:
+      ruleset-created:
+        description: 'Criei uma ruleset para o repo, pode confiar!'
+        type: boolean
+        required: true
+        default: false
+
   branch_protection_rule:
     types: [created]
 
@@ -18,7 +26,9 @@ jobs:
     name: Check Step Work
     runs-on: ubuntu-latest
     if: |
-      !github.event.repository.is_template
+      !github.event.repository.is_template &&
+      inputs.ruleset-created
+
 
     steps:
       - name: Checkout
