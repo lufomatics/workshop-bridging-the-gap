@@ -22,10 +22,10 @@ Este repositório contém:
 
 ## Como Iniciar este Workshop
 
-1. Clique com o botão direito em **Copiar Workshop** e abra o link em uma nova aba.
+1. Clique com o botão direito em **Copy Workshop** e abra o link em uma nova aba.
 
    <a id="copy-workshop" href="https://github.com/new?template_owner=lufomatics&template_name=workshop-bridging-the-gap&owner=%40me&name=workshop-bridging-the-gap&description=Workshop:+Bridging+The+Gap&visibility=public">
-      <img src="https://img.shields.io/badge/📠_Copiar_Workshop-008000" height="25pt"/>
+      <img src="https://img.shields.io/badge/📠_Copy_Workshop-008000" height="25pt"/>
    </a>
 
 2. Na nova aba, a maior parte dos campos será preenchida automaticamente:
@@ -34,13 +34,13 @@ Este repositório contém:
    - Clique em **Create repository**.
 
 3. Aguarde cerca de 20 segundos para o repositório ser totalmente preparado. Você pode atualizar a página.  
-   - O botão **Copiar Workshop** ficará inativo, mudando para a cor cinza.  
+   - O botão **Copy Workshop** ficará inativo, mudando para a cor cinza.  
    - O botão **Iniciar Workshop** será ativado, mudando para a cor verde.
 
 4. Clique em **Iniciar Workshop** e siga as instruções. Ao final do fluxo (merge do Pull Request), você terá um repositório completamente funcional em uma nova organização.
 
    <a id="start-workshop">
-      <img src="https://img.shields.io/badge/🚀_Iniciar_Workshop-AAA" height="25pt"/>
+      <img src="https://img.shields.io/badge/🚀_Start_Workshop-AAA" height="25pt"/>
    </a>
 
 > [!IMPORTANT]  
