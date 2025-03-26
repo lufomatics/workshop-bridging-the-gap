@@ -1,6 +1,6 @@
 # “Bridging The Gap: De Tradicional à Tech-Driven”
 
-![](../../actions/workflows/0-start-workshop.yml/badge.svg)
+![](../../actions/workflows/0-start-workshop.yaml/badge.svg)
 
 > Este repositório serve como guia para adoção de práticas GitHub em organizações de maior porte.  
 > Aqui abordamos: criação de organização, configurações essenciais, padronização de ambientes, GitHub Actions e muito mais.
@@ -35,15 +35,15 @@ Este repositório contém:
 
 3. Aguarde cerca de 20 segundos para o repositório ser totalmente preparado. Você pode atualizar a página.  
    - O botão **Copy Workshop** ficará inativo, mudando para a cor cinza.  
-   - O botão **Iniciar Workshop** será ativado, mudando para a cor verde.
+   - O botão **Start Workshop** será ativado, mudando para a cor verde.
 
-4. Clique em **Iniciar Workshop** e siga as instruções. Ao final do fluxo (merge do Pull Request), você terá um repositório completamente funcional em uma nova organização.
+4. Clique em **Start Workshop** e siga as instruções. Ao final do fluxo (merge do Pull Request), você terá um repositório completamente funcional em uma nova organização.
 
    <a id="start-workshop">
       <img src="https://img.shields.io/badge/🚀_Start_Workshop-AAA" height="25pt"/>
    </a>
 
 > [!IMPORTANT]  
-> O botão **Iniciar Workshop** ficará ativo somente após copiar o repositório. Você provavelmente precisará atualizar a página.
+> O botão **Start Workshop** ficará ativo somente após copiar o repositório. Você provavelmente precisará atualizar a página.
 
 ---
