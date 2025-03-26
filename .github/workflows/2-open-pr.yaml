@@ -17,9 +17,16 @@ env:
   TEMPLATES_REPOSITORY: "lufomatics/reusables"
 
 jobs:
+  find-workshop-issue:
+    name: Find the Workshop Issue
+    uses: lufomatics/reusables/.github/workflows/find-workshop-issue.yaml@v0.1.0
+    with:
+      issue-title-text: 'Workshop'  # Adjust if your workshop issue has a different title text
+
   check-work:
     name: Check Step Work
     runs-on: ubuntu-latest
+    needs: [find-workshop-issue]
     if: |
       !github.event.repository.is_template
 
@@ -27,17 +34,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Gather Workshop Issue
-        id: gather-issue
-        run: |
-          ISSUE_ID=$(gh issue list --state open --json number --jq '.[0].number')
-          echo "issue_number=$ISSUE_ID" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Notify Step 2
         run: |
-          gh issue comment ${{ steps.gather-issue.outputs.issue_number }} \
+          gh issue comment ${{ needs.find-workshop-issue.outputs.issue-url }} \
             --body "Pull Request criado? Ótimo! Assim que estiver pronto, partiremos pro merge."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,19 +44,11 @@ jobs:
   post-next-step-content:
     name: Post Next Step
     runs-on: ubuntu-latest
-    needs: [check-work]
+    needs: [check-work, find-workshop-issue]
     if: |
       !github.event.repository.is_template
 
     steps:
-      - name: Gather Workshop Issue
-        id: gather-issue
-        run: |
-          ISSUE_ID=$(gh issue list --state open --json number --jq '.[0].number')
-          echo "issue_number=$ISSUE_ID" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -70,7 +61,7 @@ jobs:
 
       - name: Comment - Step 3 instructions
         run: |
-          gh issue comment ${{ steps.gather-issue.outputs.issue_number }} \
+          gh issue comment ${{ needs.find-workshop-issue.outputs.issue-url }} \
             --body-file ${{ env.STEP_3_FILE }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

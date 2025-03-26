@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reopened, edited, closed]
+    types: [closed]
 
 permissions:
   contents: write
@@ -15,9 +15,16 @@ env:
   TEMPLATES_REPOSITORY: "lufomatics/reusables"
 
 jobs:
-  check-step-work:
+  find-workshop-issue:
+    name: Find the Workshop Issue
+    uses: lufomatics/reusables/.github/workflows/find-workshop-issue.yaml@v0.1.0
+    with:
+      issue-title-text: 'Workshop'  # Adjust if your workshop issue has a different title text
+
+  check-work:
     name: Check Step Work
     runs-on: ubuntu-latest
+    needs: [find-workshop-issue]
     if: |
       !github.event.repository.is_template
 
@@ -25,18 +32,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Gather Workshop Issue
-        id: gather-issue
-        run: |
-          ISSUE_ID=$(gh issue list --state open --json number --jq '.[0].number')
-          echo "issue_number=$ISSUE_ID" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Confirm Merge
         if: github.event.pull_request.merged == true
         run: |
-          gh issue comment ${{ steps.gather-issue.outputs.issue_number }} \
+          gh issue comment ${{ needs.find-workshop-issue.outputs.issue-url }} \
             --body "Parabéns! Seu Pull Request foi mergeado com sucesso."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +43,7 @@ jobs:
   close-workshop-issue:
     name: Close Workshop Issue
     runs-on: ubuntu-latest
-    needs: [check-step-work]
+    needs: [check-work, find-workshop-issue]
     if: github.event.pull_request.merged == true
 
     steps:
@@ -53,13 +52,13 @@ jobs:
 
       - name: Comment final
         run: |
-          gh issue comment ${{ needs.check-step-work.outputs.issue_number }} \
+          gh issue comment ${{ needs.find-workshop-issue.outputs.issue-url }} \
             --body "Este workshop foi concluído! Todas as configurações estão prontas para uso."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Close Issue
         run: |
-          gh issue close ${{ needs.check-step-work.outputs.issue_number }} --comment "Workshop finalizado."
+          gh issue close ${{ needs.find-workshop-issue.outputs.issue-url }} --comment "Workshop finalizado."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
