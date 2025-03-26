@@ -13,7 +13,7 @@ permissions:
 
 env:
   TEMPLATES_REPOSITORY: "lufomatics/reusables"
-  STEP_1_FILE: ".github/steps/1-create-a-branch.md"
+  STEP_1_FILE: ".github/steps/1-create-ruleset.md"
 
 jobs:
   start-workshop:
@@ -22,8 +22,8 @@ jobs:
     name: Start Workshop
     uses: lufomatics/reusables/.github/workflows/setup-workshop-repository.yaml@v0.1.0
     with:
-      workshop-title: "Bridging the Gap"
-      intro-message: "Welcome to the workshop! Let's get started."
+      workshop-title: "Bridging The Gap"
+      intro-message: "Boas-vindas ao workshop! Vamos começar ajustando o repositório."
 
 
   post-next-step-content:
@@ -58,13 +58,13 @@ jobs:
         id: comment-watching-for-progress
         run: |
           gh issue comment "$ISSUE_URL" \
-            --body-file format('.{0}/markdown-templates/step-feedback/watching-for-progress.md', env.TEMPLATES_REPOSITORY)
+            --body-file ${{ format('.{0}/markdown-templates/step-feedback/watching-for-progress.md', env.TEMPLATES_REPOSITORY) }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Disable current workflow and enable next one
-        id: disable-enable-workflow
+      - name: Enable next workflow
+        id: enable-next-workflow
         run: |
-          gh workflow enable "Step 1"
+          gh workflow enable "Step 1 - Create A Ruleset"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

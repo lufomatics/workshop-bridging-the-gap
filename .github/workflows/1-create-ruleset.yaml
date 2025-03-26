@@ -1,0 +1,80 @@
+name: Step 1 - Create A Ruleset
+
+on:
+  branch_protection_rule:
+    types: [created]
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+env:
+  STEP_2_FILE: ".github/steps/2-open-pr.md"
+  TEMPLATES_REPOSITORY: "lufomatics/reusables"
+
+jobs:
+  check-work:
+    name: Check Step Work
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Gather Workshop Issue
+        id: gather-issue
+        run: |
+          ISSUE_ID=$(gh issue list --state open --json number --jq '.[0].number')
+          echo "issue_number=$ISSUE_ID" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Step 1
+        run: |
+          gh issue comment ${{ steps.gather-issue.outputs.issue_number }} \
+            --body "Vamos criar uma Branch Protection Rule e outras configurações. Assim que concluir, partiremos para abrir um Pull Request!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  post-next-step-content:
+    name: Post Next Step
+    runs-on: ubuntu-latest
+    needs: [check-work]
+    if: |
+      !github.event.repository.is_template
+
+    steps:
+      - name: Gather Workshop Issue
+        id: gather-issue
+        run: |
+          ISSUE_ID=$(gh issue list --state open --json number --jq '.[0].number')
+          echo "issue_number=$ISSUE_ID" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get response templates
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TEMPLATES_REPOSITORY }}
+          path: ${{ format('.{0}', env.TEMPLATES_REPOSITORY) }}
+          ref: v0.1.0
+
+      - name: Comment - Step 2 instructions
+        run: |
+          gh issue comment ${{ steps.gather-issue.outputs.issue_number }} \
+            --body-file ${{ env.STEP_2_FILE }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable current workflow and enable next one
+        run: |
+          gh workflow enable "Step 2 - Open A Pull Request"
+          gh workflow disable "Step 1 - Create A Ruleset"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
