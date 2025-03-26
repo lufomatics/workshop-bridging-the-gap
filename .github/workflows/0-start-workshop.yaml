@@ -1,0 +1,70 @@
+name: Step 0 # Start Workshop
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write # Update Readme
+  actions: write # Disable/enable workflows
+  issues: write # Create issue and comment on issues
+
+
+env:
+  TEMPLATES_REPOSITORY: "lufomatics/reusables"
+  STEP_1_FILE: ".github/steps/1-create-a-branch.md"
+
+jobs:
+  start-workshop:
+    if: |
+      !github.event.repository.is_template
+    name: Start Workshop
+    uses: lufomatics/reusables/.github/workflows/setup-workshop-repository.yaml@v0.1.0
+    with:
+      workshop-title: "Bridging the Gap"
+      intro-message: "Welcome to the workshop! Let's get started."
+
+
+  post-next-step-content:
+    name: Post next step content
+    runs-on: ubuntu-latest
+    needs: [start-workshop]
+    env:
+      ISSUE_URL: ${{ needs.start-workshop.outputs.issue-url }}
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Get response templates
+        id: get-templates
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TEMPLATES_REPOSITORY }}
+          path: ${{ format('.{0}', env.TEMPLATES_REPOSITORY) }}
+          ref: v0.1.0
+
+      - name: Create comment - add step content
+        id: comment-step-content
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file ${{ env.STEP_1_FILE }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create comment - watching for progress
+        id: comment-watching-for-progress
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file format('.{0}/markdown-templates/step-feedback/watching-for-progress.md', env.TEMPLATES_REPOSITORY)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable current workflow and enable next one
+        id: disable-enable-workflow
+        run: |
+          gh workflow enable "Step 1"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
