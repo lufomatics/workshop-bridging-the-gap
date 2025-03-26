@@ -1,6 +1,9 @@
 # “Bridging The Gap: De Tradicional à Tech-Driven”
 
 ![](../../actions/workflows/0-start-workshop.yaml/badge.svg)
+![](../../actions/workflows/1-create-ruleset.yaml/badge.svg)
+![](../../actions/workflows/2-open-pr.yaml/badge.svg)
+![](../../actions/workflows/3-merge-pr.yaml/badge.svg)
 
 > Este repositório serve como guia para adoção de práticas GitHub em organizações de maior porte.  
 > Aqui abordamos: criação de organização, configurações essenciais, padronização de ambientes, GitHub Actions e muito mais.
